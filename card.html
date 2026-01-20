@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Info</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== BASE & RESET ===== */
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; margin: 0; }
+    
+    body { 
+      font-family: 'Montserrat', sans-serif; 
+      color: #172343; 
+      background-color: #f4f6f9;
+      background-image: url("home-background.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      overflow-y: auto; 
+    }
+
+    /* ===== APP CONTAINER ===== */
+    .app { 
+      width: 100%; 
+      /* Убрали белый фон, чтобы видеть картинку */
+      background: transparent; 
+      min-height: 100vh;
+      display: flex; 
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* HEADER */
+    .header { 
+      padding: 16px 20px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      position: sticky; top: 0; 
+      /* Хедер прозрачный, чтобы кнопки "парили" */
+      background: transparent; 
+      z-index: 100;
+    }
+    
+    /* GLASS BUTTONS */
+    .icon-btn { 
+      width: 44px; height: 44px; 
+      border-radius: 14px; 
+      /* Эффект стекла */
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      
+      display: flex; align-items: center; justify-content: center; 
+      cursor: pointer; transition: all 0.2s; color: #172343;
+    }
+    .icon-btn:hover { background: rgba(255, 255, 255, 0.85); transform: translateY(-2px); }
+    .icon-btn:active { transform: scale(0.95); }
+
+    /* ===== CONTENT WRAPPER ===== */
+    .content-wrapper {
+      padding: 10px 24px 100px; 
+      max-width: 1000px; 
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* GRID SYSTEM */
+    .split-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* SIDEBAR (Визитка) - Тоже немного стекло */
+    .sidebar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex-shrink: 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .pfp-image { 
+      width: 110px; height: 110px; 
+      object-fit: cover; border-radius: 30px; 
+      margin-bottom: 16px; 
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      background: #fff;
+    }
+    
+    .title { font-size: 22px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+    .subtitle { font-size: 14px; font-weight: 500; color: #64748b; margin-bottom: 16px; }
+    
+    .salary-badge { 
+      background: #eafff0; color: #009945; 
+      padding: 8px 16px; border-radius: 12px; 
+      font-weight: 700; font-size: 16px; 
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; width: 100%; }
+    .tag { height: 32px; padding: 0 14px; border-radius: 8px; display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    
+    /* Tag Colors */
+    .tag--cyan { background: #e0fbfd; color: #006c75; }
+    .tag--pink { background: #ffebeb; color: #8f0000; }
+    .tag--green { background: #e6fffa; color: #007a5e; }
+    .tag--purple { background: #f3e8ff; color: #6b21a8; }
+    .tag--orange { background: #ffedd5; color: #9a3412; }
+    .tag--blue { background: #dbeafe; color: #1e40af; }
+    .tag--yellow { background: #fef9c3; color: #854d0e; }
+    .tag--gray { background: #f3f4f6; color: #4b5563; }
+
+    /* MAIN CONTENT */
+    .main-section {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      min-height: 200px;
+    }
+    .label { 
+      font-size: 12px; font-weight: 700; color: #94a3b8; 
+      margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; 
+      display: flex; align-items: center; gap: 10px;
+    }
+    .label::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+    
+    .text { 
+      font-size: 16px; line-height: 1.7; color: #334155; 
+      white-space: pre-wrap; word-wrap: break-word; 
+    }
+
+    /* BUTTONS */
+    .mobile-bottom-bar { 
+      position: fixed; bottom: 0; left: 0; right: 0; 
+      padding: 16px 24px 32px; 
+      
+      /* GLASS EFFECT */
+      background: rgba(255, 255, 255, 0.7); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.5); 
+      
+      z-index: 100;
+    }
+    .desktop-btn-container { display: none; width: 100%; margin-top: 24px; }
+
+    .call-btn { 
+      width: 100%; height: 56px; 
+      background: #00205b; color: #fff; border-radius: 16px; 
+      display: flex; align-items: center; justify-content: center; 
+      font-size: 16px; font-weight: 700; text-decoration: none; 
+      transition: all 0.2s; box-shadow: 0 8px 20px rgba(0, 32, 91, 0.25); 
+    }
+    .call-btn:hover { background: #003399; transform: translateY(-2px); }
+    .call-btn:active { transform: scale(0.98); }
+
+    /* SKELETON */
+    .skeleton-box { 
+      background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); 
+      background-size: 200% 100%; 
+      animation: shine 1.5s linear infinite; 
+      border-radius: 12px; 
+    }
+    @keyframes shine { to { background-position-x: -200%; } }
+    .hidden { display: none !important; }
+
+    /* DESKTOP MEDIA QUERY */
+    @media (min-width: 900px) {
+      body { display: flex; justify-content: center; padding: 40px 20px; }
+
+      .app {
+        max-width: 960px;
+        min-height: auto;
+        height: fit-content; 
+        border-radius: 32px;
+        /* Убираем фон контейнера, чтобы работали внутренние стекла */
+        background: transparent; 
+        margin: auto 0;
+      }
+
+      .header { padding: 0 40px 20px; }
+      .content-wrapper { padding: 0 40px 40px; }
+
+      .split-layout { flex-direction: row; align-items: flex-start; gap: 40px; }
+      
+      .sidebar { width: 300px; flex-shrink: 0; text-align: left; align-items: flex-start; position: sticky; top: 20px; }
+      .pfp-image { width: 140px; height: 140px; border-radius: 40px; margin-bottom: 24px; }
+      .title { font-size: 26px; }
+      .tags { justify-content: flex-start; }
+      
+      .main-section { flex-grow: 1; padding: 30px; }
+      
+      .mobile-bottom-bar { display: none; }
+      .desktop-btn-container { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    
+    <div class="header">
+      <div class="icon-btn" onclick="goBack()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </div>
+      <div class="icon-btn" onclick="shareLink()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+      </div>
+    </div>
+
+    <div id="skeleton" class="content-wrapper">
+      <div class="split-layout">
+        <div class="sidebar" style="width: 100%; max-width: 300px; margin: 0 auto; height: 400px; justify-content: center;">
+          <div class="skeleton-box" style="width: 110px; height: 110px; border-radius: 30px; margin-bottom: 20px;"></div>
+          <div class="skeleton-box" style="width: 70%; height: 28px; margin-bottom: 10px;"></div>
+          <div class="skeleton-box" style="width: 40%; height: 16px; margin-bottom: 20px;"></div>
+        </div>
+        <div class="main-section" style="width: 100%; height: 300px;">
+          <div class="skeleton-box" style="width: 100%; height: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mainContent" class="content-wrapper hidden">
+      </div>
+
+    <div class="mobile-bottom-bar" id="mobileBtnBox">
+      <a href="#" class="call-btn" id="mobCallBtn">...</a>
+    </div>
+
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyf9kKiLvAnazrc_3X3riq5QSDaex8Rcrtk_VwxPA6D6jNZCCNAR9O8ibCz9_K1ojPTVA/exec";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const urlLang = urlParams.get('lang');
+    const currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
+
+    const t = currentLang === "ru" 
+      ? { error: "Инфо не найдено", desc_label: "Подробности", contact_btn: "Связаться", alert: "Номер не указан" } 
+      : { error: "Ақпарат табылмады", desc_label: "Толық ақпарат", contact_btn: "Хабарласу", alert: "Нөмір көрсетілмеген" };
+
+    function goBack() { window.location.href = `home.html?lang=${currentLang}`; }
+
+    function shareLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => alert("Ссылка скопирована"));
+    }
+
+    function tagClass(tone){
+      const map = {cyan:"tag--cyan",pink:"tag--pink",green:"tag--green",purple:"tag--purple",orange:"tag--orange",blue:"tag--blue",yellow:"tag--yellow"};
+      return map[(tone||"").toLowerCase()] || "tag--gray";
+    }
+
+    async function loadItem() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const item = data.find(row => String(row.id) === String(id));
+
+        document.getElementById("skeleton").classList.add("hidden");
+        const content = document.getElementById("mainContent");
+        content.classList.remove("hidden");
+
+        if (!item) {
+          content.innerHTML = `<div style="text-align:center; color:red; padding: 40px;">${t.error}</div>`;
+          return;
+        }
+        renderPage(item);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderPage(item) {
+      const imageUrl = item.pfp || item.icon || "https://via.placeholder.com/150/eee/ccc?text=%20";
+      
+      let tagsHtml = "";
+      if (item.tag1) tagsHtml += `<div class="tag ${tagClass(item.tag1_tone)}">${item.tag1}</div>`;
+      if (item.tag2) tagsHtml += `<div class="tag ${tagClass(item.tag2_tone)}">${item.tag2}</div>`;
+
+      const description = item.desc_full || item.desc || "";
+
+      const html = `
+        <div class="split-layout">
+          
+          <div class="sidebar">
+            <img src="${imageUrl}" class="pfp-image" alt="">
+            <div class="title">${item.title}</div>
+            <div class="subtitle">${item.subtitle}</div>
+            
+            <div class="salary-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#009945"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 15.76V19h-2.1v-1.19c-.53-.17-1.03-.43-1.48-.79l1.15-1.5c.35.25.68.43 1.01.53.33.1.66.11.96.03.3-.08.45-.27.45-.59 0-.21-.08-.37-.23-.49-.15-.12-.46-.23-.92-.35-.78-.2-1.38-.45-1.78-.73-.41-.28-.61-.71-.61-1.29 0-.52.2-1 .61-1.44s.95-.7 1.63-.79V7h2.1v1.13c.47.14.89.37 1.25.69l-1.12 1.48c-.28-.2-.55-.35-.82-.44-.27-.09-.56-.1-.86-.02-.3.08-.45.28-.45.59 0 .2.08.35.24.46.16.11.47.23.94.35.8.21 1.4.47 1.8.78.4.31.6.75.6 1.33 0 .56-.2 1.05-.6 1.48-.4.43-.96.69-1.66.79z"></path></svg>
+              ${item.salary}
+            </div>
+
+            <div class="tags">${tagsHtml}</div>
+            
+            <div class="desktop-btn-container">
+              <a href="#" class="call-btn desk-btn">${t.contact_btn}</a>
+            </div>
+          </div>
+
+          <div class="main-section">
+            <div class="label">${t.desc_label}</div>
+            <div class="text">${description}</div>
+          </div>
+
+        </div>
+      `;
+      
+      const content = document.getElementById("mainContent");
+      content.innerHTML = html;
+
+      const mobBtn = document.getElementById("mobCallBtn");
+      mobBtn.textContent = t.contact_btn;
+      setupButton(mobBtn, item.contact);
+      
+      const deskBtn = content.querySelector(".desk-btn");
+      if(deskBtn) setupButton(deskBtn, item.contact);
+    }
+
+    function setupButton(btn, contact) {
+      if (!btn) return;
+      if (contact) {
+        const c = String(contact);
+        if (c.includes("http") || c.includes("t.me")) {
+          btn.href = c;
+          btn.target = "_blank";
+        } else {
+          btn.href = "tel:" + c;
+        }
+      } else {
+        btn.onclick = (e) => { e.preventDefault(); alert(t.alert); };
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+      }
+    }
+
+    loadItem();
+  </script>
+</body>
+</html>

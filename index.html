@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jumys.online</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+
+    .start-1{
+      min-height: 100vh;
+      position: relative;
+      background-image: url("background-desktop.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 24px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px){
+      .start-1{ background-image: url("background-mobile.png"); }
+    }
+
+    .start-1::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.15), rgba(0,0,0,0.20));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .start-1 > * { position: relative; z-index: 1; }
+
+    .lang-switcher{
+      display: flex;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .lang-rect{
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.20);
+      border: 1px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(10px);
+      font-family: Montserrat, sans-serif;
+      color: #fff;
+      user-select: none;
+    }
+
+    .lang-pill{
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+    .lang-pill.active{
+      border: 1px solid rgba(255,255,255,0.9);
+      opacity: 1;
+    }
+
+    .hero{
+      max-width: 560px;
+      margin-top: 50px;
+      font-family: Montserrat, sans-serif;
+      color: #fff;
+    }
+
+    @media (max-width: 768px){ .hero{ margin-top: 200px; } }
+
+    .jumys-online{
+      font-size: 44px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      margin-bottom: 10px;
+    }
+
+    .div{
+      font-size: 16px;
+      line-height: 1.35;
+      opacity: 0.95;
+      max-width: 420px;
+    }
+
+    .button-continue{
+      display: flex;
+      justify-content: center;
+      padding-bottom: 16px;
+    }
+
+    .continue{
+      width: min(640px, 100%);
+      background: rgba(255,255,255,0.92);
+      color: #111;
+      text-align: center;
+      padding: 18px 22px;
+      border-radius: 18px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s, background 0.1s;
+      text-decoration: none;
+      display: block;
+    }
+    
+    .continue:active { transform: scale(0.98); background: #fff; }
+
+    @media (max-width: 420px){
+      .jumys-online{ font-size: 36px; }
+      .start-1{ padding: 22px 18px; }
+      .continue{ width: min(520px, 100%); padding: 16px 18px; font-size: 16px; }
+    }
+
+    @media (min-width: 769px){
+      .hero{
+        margin-top: 300px !important;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        align-self: center;
+      }
+      .jumys-online{ font-size: 90px; }
+      .div{ font-size: 25px; line-height: 1.5; max-width: 600px; margin-left: auto; margin-right: auto; }
+      .continue{ width: 720px; max-width: 80vw; padding: 22px 28px; font-size: 20px; border-radius: 22px; }
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+
+  </style>
+</head>
+
+<body>
+  <div class="start-1">
+
+    <div class="lang-switcher">
+      <div class="lang-rect">
+        <div class="lang-pill active" data-lang="kz">Қаз</div>
+        <div class="lang-pill" data-lang="ru">Рус</div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="jumys-online" data-i18n="title">Jumys.online</div>
+      <div class="div" data-i18n="desc">
+        Қызылордаға арналған жергілікті
+        <br />
+        жұмыс алаңы: жұмыс іздеуші мен
+        <br />
+        жұмыс берушіні тез байланыстырамыз.
+      </div>
+    </div>
+
+    <div class="button-continue">
+      <a href="home.html" id="startLink" class="continue" data-i18n="start_btn">Бастау</a>
+    </div>
+
+  </div>
+
+  <script>
+    const translations = {
+      kz: {
+        title: "Jumys.online",
+        desc: `Қызылордаға арналған жергілікті<br/>
+               жұмыс алаңы: жұмыс іздеуші мен<br/>
+               жұмыс берушіні тез байланыстырамыз.`,
+        start_btn: "Бастау",
+      },
+      ru: {
+        title: "Jumys.online",
+        desc: `Местная площадка вакансий для Кызылорды.<br>
+               Быстро связываем соискателя<br>
+               и работодателя.`,
+        start_btn: "Начать",
+      }
+    };
+
+    function setLanguage(lang) {
+      // 1. Меняем визуал кнопок
+      document.querySelectorAll(".lang-pill").forEach(pill => {
+        pill.classList.toggle("active", pill.dataset.lang === lang);
+      });
+
+      // 2. Меняем текст на странице
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        el.innerHTML = translations[lang][key];
+      });
+
+      // 3. Сохраняем в память (на всякий случай)
+      localStorage.setItem("lang", lang);
+      document.documentElement.lang = (lang === "ru" ? "ru" : "kk");
+
+      // 4. ГЛАВНОЕ: Меняем ссылку на кнопке "Бастау", добавляя параметр ?lang=...
+      const startLink = document.getElementById("startLink");
+      startLink.href = "home.html?lang=" + lang;
+    }
+
+    // Слушатели кликов
+    document.querySelectorAll(".lang-pill").forEach(pill => {
+      pill.addEventListener("click", () => setLanguage(pill.dataset.lang));
+    });
+
+    // При загрузке страницы
+    const saved = localStorage.getItem("lang") || "kz";
+    setLanguage(saved === "ru" ? "ru" : "kz");
+  </script>
+</body>
+</html>
