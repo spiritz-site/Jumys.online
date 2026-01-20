@@ -182,26 +182,26 @@
     @keyframes shine { to { background-position-x: -200%; } }
     .hidden { display: none !important; }
 
-    /* DESKTOP MEDIA QUERY */
+    /* DESKTOP MEDIA QUERY (полноэкранная десктоп версия) */
     @media (min-width: 900px) {
-      body { display: flex; justify-content: center; padding: 40px 20px; }
+      body { display: block; justify-content: unset; padding: 0; }
 
       .app {
-        max-width: 960px;
-        min-height: auto;
-        height: fit-content; 
-        border-radius: 32px;
-        /* Убираем фон контейнера, чтобы работали внутренние стекла */
-        background: transparent; 
-        margin: auto 0;
+        max-width: none;
+        width: 100%;
+        min-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+        background: transparent;
+        margin: 0;
       }
 
-      .header { padding: 0 40px 20px; }
-      .content-wrapper { padding: 0 40px 40px; }
+      .header { padding: 20px 40px; }
+      .content-wrapper { padding: 0 40px 40px; max-width: 1200px; }
 
       .split-layout { flex-direction: row; align-items: flex-start; gap: 40px; }
       
-      .sidebar { width: 300px; flex-shrink: 0; text-align: left; align-items: flex-start; position: sticky; top: 20px; }
+      .sidebar { width: 320px; flex-shrink: 0; text-align: left; align-items: flex-start; position: sticky; top: 20px; }
       .pfp-image { width: 140px; height: 140px; border-radius: 40px; margin-bottom: 24px; }
       .title { font-size: 26px; }
       .tags { justify-content: flex-start; }
@@ -211,12 +211,73 @@
       .mobile-bottom-bar { display: none; }
       .desktop-btn-container { display: block; }
     }
+
+    /* ===== CUSTOM ALERT MODAL (дизайн) ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .modal-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      padding: 26px 24px 20px;
+      border-radius: 24px;
+      width: min(520px, 100%);
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      transform: translateY(18px) scale(0.98);
+      transition: transform 0.25s ease;
+    }
+    .modal-overlay.active .modal-card { transform: translateY(0) scale(1); }
+
+    .modal-icon {
+      width: 64px; height: 64px;
+      background: rgba(241, 245, 249, 0.9);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 26px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .modal-text {
+      font-size: 16px; font-weight: 600; color: #1e293b;
+      margin-bottom: 18px; line-height: 1.55;
+    }
+
+    .modal-close {
+      width: 100%; padding: 14px;
+      background: #00205b; color: #fff;
+      border: none; border-radius: 14px;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 12px 28px rgba(0, 32, 91, 0.25);
+    }
+    .modal-close:hover { background: #003399; transform: translateY(-1px); }
+    .modal-close:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
+  <div id="customAlert" class="modal-overlay" onclick="closeAlert()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-icon">ℹ️</div>
+      <div id="modalMsg" class="modal-text"></div>
+      <button class="modal-close" onclick="closeAlert()">OK</button>
+    </div>
+  </div>
 
   <div class="app">
-    
     <div class="header">
       <div class="icon-btn" onclick="goBack()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
@@ -239,13 +300,11 @@
       </div>
     </div>
 
-    <div id="mainContent" class="content-wrapper hidden">
-      </div>
+    <div id="mainContent" class="content-wrapper hidden"></div>
 
     <div class="mobile-bottom-bar" id="mobileBtnBox">
       <a href="#" class="call-btn" id="mobCallBtn">...</a>
     </div>
-
   </div>
 
   <script>
@@ -257,13 +316,24 @@
     const currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
 
     const t = currentLang === "ru" 
-      ? { error: "Инфо не найдено", desc_label: "Подробности", contact_btn: "Связаться", alert: "Номер не указан" } 
-      : { error: "Ақпарат табылмады", desc_label: "Толық ақпарат", contact_btn: "Хабарласу", alert: "Нөмір көрсетілмеген" };
+      ? { error: "Инфо не найдено", desc_label: "Подробности", contact_btn: "Связаться", alert: "Номер не указан", copied: "Ссылка скопирована" } 
+      : { error: "Ақпарат табылмады", desc_label: "Толық ақпарат", contact_btn: "Хабарласу", alert: "Нөмір көрсетілмеген", copied: "Сілтеме көшірілді" };
 
     function goBack() { window.location.href = `home.html?lang=${currentLang}`; }
 
+    /* кастомный алерт */
+    function showAlert(message){
+      const overlay = document.getElementById("customAlert");
+      const msg = document.getElementById("modalMsg");
+      msg.textContent = message || "";
+      overlay.classList.add("active");
+    }
+    function closeAlert(){
+      document.getElementById("customAlert").classList.remove("active");
+    }
+
     function shareLink() {
-      navigator.clipboard.writeText(window.location.href).then(() => alert("Ссылка скопирована"));
+      navigator.clipboard.writeText(window.location.href).then(() => showAlert(t.copied));
     }
 
     function tagClass(tone){
@@ -344,11 +414,14 @@
         if (c.includes("http") || c.includes("t.me")) {
           btn.href = c;
           btn.target = "_blank";
+          btn.onclick = null;
         } else {
           btn.href = "tel:" + c;
+          btn.onclick = null;
         }
       } else {
-        btn.onclick = (e) => { e.preventDefault(); alert(t.alert); };
+        btn.href = "#";
+        btn.onclick = (e) => { e.preventDefault(); showAlert(t.alert); };
         btn.style.opacity = "0.6";
         btn.style.cursor = "not-allowed";
       }

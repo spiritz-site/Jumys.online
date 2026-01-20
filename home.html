@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Jumys - Search</title>
+  <title>Jumys.online</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,11 +58,17 @@
     /* CATEGORIES */
     .categories { display: flex; gap: 14px; width: 100%; }
     .category { 
-      flex: 1; position: relative; border-radius: var(--radius); cursor: pointer; overflow: hidden; 
-      aspect-ratio: 16/9; transition: transform 0.2s; 
-      background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
+  flex: 1; 
+  position: relative; 
+  border-radius: var(--radius); 
+  cursor: pointer; 
+  overflow: hidden; 
+  aspect-ratio: 10/6 !important; /* Добавь это, чтобы перебить остальные стили */
+  transition: transform 0.2s; 
+  background: rgba(255, 255, 255, 0.6); 
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
     .category.is-active { transform: scale(1.02); z-index: 2; box-shadow: 0 15px 30px rgba(0,80,255,0.25); border: 1px solid rgba(255, 255, 255, 0.8); }
     .category__bg { position: absolute; inset: 0; background: linear-gradient(180deg, #0069ff 0%, #00afff 100%); opacity: 0.85; }
     .category--worker .category__bg { transform: rotate(180deg); }
@@ -133,7 +139,7 @@
       .question { font-size: 32px; text-align: center; margin-bottom: 10px; }
       .search-container { max-width: 800px; margin: 0 auto; }
       .categories { max-width: 800px; margin: 0 auto; gap: 24px; }
-      .category { aspect-ratio: 16/7; } /* Более вытянутые кнопки категорий на десктопе */
+      .category { aspect-ratio: 15/5; } /* Более вытянутые кнопки категорий на десктопе */
       .add-action-box { max-width: 800px; margin: 0 auto; }
       .section-row { max-width: 1200px; margin: 20px auto 10px; }
       .cards { grid-template-columns: repeat(2, 1fr); gap: 30px; } /* Две колонки на планшетах/ноутбуках */
@@ -191,7 +197,7 @@
         </div>
       </div>
 
-      <a href="https://t.me/твой_логин_бота" target="_blank" class="add-action-box">
+      <a href="https://t.me/@jumys_online_bot" target="_blank" class="add-action-box">
         <div class="add-action-text">
           <div class="add-action-title" data-i18n="add_title">Өз хабарландыруыңды қос</div>
           <div class="add-action-sub" data-i18n="add_sub">Жұмыс немесе жұмысшы іздеу 1000₸</div>
