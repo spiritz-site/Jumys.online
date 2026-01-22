@@ -8,11 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<meta property="og:title" content="Jumys.online — Қызылордадағы жұмыс">
-<meta property="og:description" content="Жұмыс немесе қызметкерді 5 минутта табыңыз. Жылдам әрі ыңғайлы.">
-<meta property="og:image" content="https://raw.githubusercontent.com/spiritz-site/Jumys.online/main/poster%2016%209.png">
-<meta property="og:type" content="website">
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/spiritz-site/Jumys.online/main/favicon.png">
+  <meta property="og:title" content="Jumys.online — Қызылордадағы жұмыс">
+  <meta property="og:description" content="Жұмыс немесе қызметкерді 5 минутта табыңыз. Жылдам әрі ыңғайлы.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/spiritz-site/Jumys.online/main/poster%2016%209.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/spiritz-site/Jumys.online/main/favicon.png">
+  
   <style>
     /* ===== BASE ===== */
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -45,7 +46,20 @@
     .app { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
     .content { width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px var(--pad); display: flex; flex-direction: column; gap: 24px; }
 
+    /* LANGUAGE SWITCH */
+    .lang-switch { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn {
+      height: 32px; min-width: 46px; padding: 0 10px; border-radius: 999px;
+      border: var(--border); background: rgba(255, 255, 255, 0.7);
+      font-size: 12px; font-weight: 700; color: #172343; cursor: pointer;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .lang-btn.is-active { background: var(--primary); color: #fff; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .lang-btn:active { transform: scale(0.96); }
+
     /* SEARCH */
+    .question-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .search-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
     .search { position: relative; width: 100%; }
     .search-bg {
@@ -62,17 +76,17 @@
     /* CATEGORIES */
     .categories { display: flex; gap: 14px; width: 100%; }
     .category { 
-  flex: 1; 
-  position: relative; 
-  border-radius: var(--radius); 
-  cursor: pointer; 
-  overflow: hidden; 
-  aspect-ratio: 10/6 !important; /* Добавь это, чтобы перебить остальные стили */
-  transition: transform 0.2s; 
-  background: rgba(255, 255, 255, 0.6); 
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
+      flex: 1; 
+      position: relative; 
+      border-radius: var(--radius); 
+      cursor: pointer; 
+      overflow: hidden; 
+      aspect-ratio: 10/6 !important;
+      transition: transform 0.2s; 
+      background: rgba(255, 255, 255, 0.6); 
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
     .category.is-active { transform: scale(1.02); z-index: 2; box-shadow: 0 15px 30px rgba(0,80,255,0.25); border: 1px solid rgba(255, 255, 255, 0.8); }
     .category__bg { position: absolute; inset: 0; background: linear-gradient(180deg, #0069ff 0%, #00afff 100%); opacity: 0.85; }
     .category--worker .category__bg { transform: rotate(180deg); }
@@ -99,7 +113,8 @@
     .show-all { flex-shrink: 0; padding: 8px 16px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 99px; border: var(--border); font-size: 13px; font-weight: 600; cursor: pointer; }
 
     /* CARDS GRID */
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
+    /* ИСПРАВЛЕНИЕ 1: minmax уменьшен до 280px, чтобы не ломалось на iPhone SE и узких экранах */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding-bottom: 40px; }
     
     .card { 
       background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
@@ -113,11 +128,32 @@
     .vip-badge { position: absolute; top: -10px; right: 15px; background: var(--vip-gold); color: #000; font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 8px; }
 
     .card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
-    .card__left { display: flex; gap: 12px; align-items: center; overflow: hidden; }
+    
+    /* ИСПРАВЛЕНИЕ 2: flex: 1 и min-width: 0 для обрезания текста */
+    .card__left { 
+      display: flex; gap: 12px; align-items: center; 
+      overflow: hidden; 
+      flex: 1; /* Занимаем всё свободное место */
+      min-width: 0; /* РАЗРЕШАЕМ сжиматься меньше контента (чтобы ... работало) */
+    }
+    
     .card__icon { width: 36px; height: 36px; flex-shrink: 0; object-fit: contain; border-radius: 8px; }
+    .card__meta { overflow: hidden; } /* Обертка для текста, чтобы не вылезал */
+    
     .card__title { font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card__sub { font-size: 13px; color: #888; margin-top: 2px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card__salary { flex-shrink: 0; font-size: 15px; font-weight: 700; color: #009945; background: #eafff0; padding: 4px 8px; border-radius: 6px; }
+    
+    /* ИСПРАВЛЕНИЕ 3: Ограничение ширины зарплаты */
+    .card__salary { 
+      flex-shrink: 0; 
+      font-size: 12px; font-weight: 700; color: #009945; background: #eafff0; 
+      padding: 4px 8px; border-radius: 6px; 
+      max-width: 45%; /* Не даем занять больше 45% ширины */
+      text-align: right;
+      white-space: normal; /* Разрешаем перенос строк, если очень длинная сумма */
+      word-break: break-word; 
+    }
+    
     .card__desc { font-size: 14px; line-height: 1.5; color: #444; flex-grow: 1; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } 
     .card__bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
     .card__tags { display: flex; gap: 6px; overflow: hidden; }
@@ -143,14 +179,14 @@
       .question { font-size: 32px; text-align: center; margin-bottom: 10px; }
       .search-container { max-width: 800px; margin: 0 auto; }
       .categories { max-width: 800px; margin: 0 auto; gap: 24px; }
-      .category { aspect-ratio: 15/5; } /* Более вытянутые кнопки категорий на десктопе */
+      .category { aspect-ratio: 15/5; }
       .add-action-box { max-width: 800px; margin: 0 auto; }
       .section-row { max-width: 1200px; margin: 20px auto 10px; }
-      .cards { grid-template-columns: repeat(2, 1fr); gap: 30px; } /* Две колонки на планшетах/ноутбуках */
+      .cards { grid-template-columns: repeat(2, 1fr); gap: 30px; }
     }
 
     @media (min-width: 1024px) {
-      .cards { grid-template-columns: repeat(3, 1fr); } /* Три колонки на больших мониторах */
+      .cards { grid-template-columns: repeat(3, 1fr); }
       .question { font-size: 40px; }
     }
 
@@ -158,7 +194,7 @@
       .app { max-width: 100%; background: transparent; }
       .content { padding: 20px 16px; }
       .cards { grid-template-columns: 1fr; }
-      .category { aspect-ratio: 167/197; } /* Возвращаем мобильный вид пропорций */
+      .category { aspect-ratio: 167/197; }
     }
   </style>
 </head>
@@ -168,7 +204,13 @@
     <div class="content">
 
       <div class="search-container">
-        <div class="question" data-i18n="question">Не іздеп отырсыз?</div>
+        <div class="question-row">
+          <div class="question" data-i18n="question">Не іздеп отырсыз?</div>
+          <div class="lang-switch" aria-label="Language switch">
+            <button class="lang-btn" type="button" data-lang="kz">KZ</button>
+            <button class="lang-btn" type="button" data-lang="ru">RU</button>
+          </div>
+        </div>
         <div class="search">
           <div class="search-bg"></div>
           <div class="searchbar">
@@ -235,7 +277,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    const currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
+    let currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
 
     const translations = {
       kz: { 
@@ -254,6 +296,25 @@
       document.getElementById("q").placeholder = t.placeholder;
     }
     applyLang();
+
+    function updateLangButtons() {
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("is-active", btn.dataset.lang === currentLang);
+      });
+    }
+    updateLangButtons();
+
+    function setLang(lang) {
+      if (!translations[lang]) return;
+      currentLang = lang;
+      localStorage.setItem("lang", lang);
+      const params = new URLSearchParams(window.location.search);
+      params.set("lang", lang);
+      history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+      applyLang();
+      draw();
+      updateLangButtons();
+    }
 
     const state = { type: "vacancy", q: "" };
     let items = [];
@@ -337,8 +398,12 @@
     document.getElementById("catWork").onclick = () => { state.type = "vacancy"; document.getElementById("catWork").classList.add("is-active"); document.getElementById("catWorker").classList.remove("is-active"); draw(); };
     document.getElementById("catWorker").onclick = () => { state.type = "profile"; document.getElementById("catWorker").classList.add("is-active"); document.getElementById("catWork").classList.remove("is-active"); draw(); };
     document.getElementById("showAll").onclick = () => { state.q = ""; document.getElementById("q").value = ""; draw(); };
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.onclick = () => setLang(btn.dataset.lang);
+    });
 
     loadFromSheets();
   </script>
 </body>
 </html>
+

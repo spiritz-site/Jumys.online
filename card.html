@@ -24,28 +24,30 @@
       font-family: 'Montserrat', sans-serif; 
       color: #172343; 
       background-color: #F3F4F6;
+      /* На мобильных скролл у body, на десктопе уберем */
       overflow-y: auto; 
     }
 
     /* ===== UI COMPONENTS ===== */
     .nav-overlay {
       position: fixed; top: 0; left: 0; right: 0;
-      padding: 12px 16px;
+      padding: 16px 20px;
       display: flex; justify-content: space-between;
       z-index: 100; pointer-events: none;
     }
     .circle-btn {
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(0,0,0,0.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; pointer-events: auto;
-      color: #172343; transition: transform 0.2s;
+      color: #172343; transition: all 0.2s;
     }
     .circle-btn:active { transform: scale(0.92); }
+    .circle-btn:hover { background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
 
     .app { 
       max-width: 600px;
@@ -54,12 +56,13 @@
       min-height: 100vh;
       box-shadow: 0 0 40px rgba(0,0,0,0.05);
       padding-bottom: 80px;
+      display: flex; flex-direction: column;
     }
 
     /* Gallery */
     .gallery-container {
-      position: relative; width: 100%; height: 260px;
-      background: #eee; overflow: hidden;
+      position: relative; width: 100%; height: 300px;
+      background: #f1f5f9; overflow: hidden; flex-shrink: 0;
     }
     .gallery-scroll {
       display: flex; width: 100%; height: 100%;
@@ -77,95 +80,83 @@
       padding: 24px 20px;
       background: #fff;
       border-radius: 24px 24px 0 0;
-      margin-top: -24px;
+      margin-top: -24px; /* Наезд на фото */
       position: relative;
       z-index: 10;
-      min-height: 500px;
+      flex-grow: 1;
     }
     .card-body.no-hero {
-      margin-top: 0; border-radius: 0; padding-top: 70px;
+      margin-top: 0; border-radius: 0; padding-top: 80px;
     }
 
-    /* Titles */
-    .place-header { margin-bottom: 12px; }
-    .place-title { font-size: 26px; font-weight: 800; line-height: 1.15; margin-bottom: 4px; color: #0F172A; }
-    .place-category { font-size: 14px; font-weight: 500; color: #64748b; }
+    /* PFP (Avatar) */
+    .pfp-container {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: #fff;
+      margin-top: -60px;
+      margin-bottom: 16px;
+      position: relative; z-index: 20;
+      overflow: hidden;
+    }
+    .pfp-img { width: 100%; height: 100%; object-fit: cover; }
+    .card-body.no-hero .pfp-container { margin-top: 0; }
 
-    /* --- TAGS STYLES (ВЕРНУЛ ТЕГИ) --- */
-    .tags-container {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-top: 10px; margin-bottom: 16px;
-    }
-    .tag-chip {
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 12px; font-weight: 600;
-      white-space: nowrap;
-    }
-    /* Цвета для тегов */
-    .tag { height: 26px; padding: 0 10px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; white-space: nowrap; }
-    .tag-cyan { background: #e0fbfd; color: #006c75; }
+    /* Headers */
+    .place-header { margin-bottom: 16px; }
+    .place-title { font-size: 28px; font-weight: 800; line-height: 1.15; margin-bottom: 6px; color: #0F172A; }
+    .place-category { font-size: 15px; font-weight: 500; color: #64748b; }
+
+    /* Tags */
+    .tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; margin-bottom: 20px; }
+    .tag-chip { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+    .tag-gray { background: #F1F5F9; color: #475569; }
+    .tag-green { background: #DCFCE7; color: #166534; }
+    .tag-blue { background: #DBEAFE; color: #1E40AF; }
+    .tag-purple { background: #F3E8FF; color: #6B21A8; }
+    .tag-orange { background: #FFEDD5; color: #9A3412; }
+    .tag-cyan { background: #CFFAFE; color: #155E75; }
     .tag-pink { background: #ffebeb; color: #8f0000; }
-    .tag-green { background: #e6f9ed; color: #027a3b; }
-    .tag-purple { background: #f3e8ff; color: #5a00b8; }
-    .tag-orange { background: #fff4e5; color: #b35c00; }    
-    .tag-blue { background: #e5f0ff; color: #0047b3; }
     .tag-yellow { background: #fff9e5; color: #b38a00; }
-    .tag-gray { background: #f0f0f0; color: #666666; }
 
-    /* Rating Row */
-    .rating-row { 
-      display: flex; align-items: center; gap: 8px; 
-      margin-bottom: 24px; 
-      padding-bottom: 20px;
-      border-bottom: 1px solid #f1f5f9;
-    }
+    /* Rating */
+    .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; }
     .stars-svg { display: flex; gap: 2px; color: #FFC107; }
-    .rating-val { font-weight: 800; font-size: 15px; color: #172343; }
-    
-    .btn-2gis-small {
-      margin-left: auto;
-      background: rgba(108, 204, 51, 0.1); color: #5CB829;
-      padding: 8px 14px; border-radius: 99px;
-      font-size: 12px; font-weight: 700; text-decoration: none;
-      display: flex; align-items: center; gap: 6px; transition: 0.2s;
-    }
-    .btn-2gis-small:active { background: rgba(108, 204, 51, 0.2); }
+    .rating-val { font-weight: 800; font-size: 16px; color: #172343; }
+    .btn-2gis-small { margin-left: auto; background: rgba(108, 204, 51, 0.1); color: #5CB829; padding: 8px 14px; border-radius: 99px; font-size: 12px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
 
     /* Actions */
-    .actions-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-      margin-bottom: 30px;
-    }
-    .action-big-btn {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      height: 70px; border-radius: 16px;
-      text-decoration: none; font-weight: 600; font-size: 13px;
-      transition: transform 0.1s;
-    }
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+    .action-big-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 74px; border-radius: 18px; text-decoration: none; font-weight: 600; font-size: 14px; transition: transform 0.1s; }
     .action-big-btn:active { transform: scale(0.98); }
     .btn-call { background: #EFF6FF; color: #1E40AF; }
     .btn-wa { background: #F0FDF4; color: #15803D; }
 
     /* Info List */
-    .section-label { font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 16px; }
-    .info-list { display: flex; flex-direction: column; gap: 0; }
-    .info-row {
-      display: flex; align-items: center; gap: 16px; padding: 16px 0;
-      border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit;
-    }
+    .section-label { font-size: 18px; font-weight: 800; color: #0F172A; margin-bottom: 16px; }
+    .info-list { display: flex; flex-direction: column; }
+    .info-row { display: flex; align-items: center; gap: 16px; padding: 18px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none; color: inherit; transition: background 0.2s; }
+    .info-row:hover { background: #fcfcfc; }
     .info-row:last-child { border-bottom: none; }
-    .info-icon {
-      width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; background: #F8FAFC;
-      display: flex; align-items: center; justify-content: center; color: #64748b;
-    }
+    .info-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; background: #F8FAFC; display: flex; align-items: center; justify-content: center; color: #64748b; }
     .info-content { flex: 1; }
-    .info-title { font-size: 15px; font-weight: 600; color: #1E293B; line-height: 1.3; }
-    .info-subtitle { font-size: 13px; color: #94A3B8; margin-top: 2px; }
-    .arrow-icon { color: #CBD5E1; }
-    
+    .info-title { font-size: 15px; font-weight: 600; color: #1E293B; line-height: 1.35; }
+    .info-subtitle { font-size: 13px; color: #94A3B8; margin-top: 3px; }
     .salary-row .info-icon { background: #DCFCE7; color: #15803D; }
-    .salary-row .info-title { color: #15803D; font-weight: 800; font-size: 17px; }
+    .salary-row .info-title { color: #15803D; font-weight: 800; font-size: 18px; }
+
+    /* --- BEAUTIFUL DESCRIPTION TEXT --- */
+    .desc-content {
+      color: #334155;
+      font-size: 16px;
+      line-height: 1.8; /* Воздух между строками */
+    }
+    .desc-content p {
+      margin-bottom: 16px; /* Отступ между абзацами */
+    }
+    .desc-content p:last-child { margin-bottom: 0; }
 
     /* Skeleton & Alert */
     .skeleton-box { background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); background-size: 200% 100%; animation: shine 1.5s linear infinite; border-radius: 8px; }
@@ -175,12 +166,71 @@
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-card { background: #fff; padding: 24px; border-radius: 20px; width: 80%; max-width: 320px; text-align: center; transform: scale(0.9); transition: 0.3s; }
     .modal-overlay.active .modal-card { transform: scale(1); }
+
+    /* ===== DESKTOP FULLSCREEN STYLE (100% Screen) ===== */
+    @media (min-width: 900px) {
+      body {
+        overflow: hidden; /* Убираем скролл у body, скроллим только контент */
+        background: #fff;
+      }
+      
+      .nav-overlay {
+        position: fixed; top: 30px; right: 40px; left: auto; width: auto; 
+        gap: 12px; pointer-events: none; padding: 0; z-index: 200;
+      }
+      .nav-overlay .circle-btn {
+        pointer-events: auto; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .app {
+        width: 100vw; /* На всю ширину */
+        height: 100vh; /* На всю высоту */
+        max-width: none;
+        margin: 0;
+        border-radius: 0;
+        flex-direction: row; /* Две колонки */
+        box-shadow: none;
+        padding-bottom: 0;
+      }
+
+      /* Левая колонка - Галерея (Фиксированная) */
+      .gallery-container {
+        width: 50%; height: 100%;
+        border-right: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+      .gallery-item { object-fit: cover; }
+
+      /* Правая колонка - Контент (Скролл) */
+      .card-body {
+        width: 50%; height: 100%;
+        overflow-y: auto; /* Скролл только здесь */
+        padding: 60px 80px; /* Большие отступы для красоты */
+        border-radius: 0;
+        margin-top: 0;
+      }
+      .card-body.no-hero { padding-top: 60px; }
+
+      /* Scrollbar styling */
+      .card-body::-webkit-scrollbar { width: 8px; }
+      .card-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      .card-body::-webkit-scrollbar-track { background: transparent; }
+
+      .pfp-container {
+        width: 140px; height: 140px;
+        margin-top: 0; margin-bottom: 32px;
+        border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      }
+      
+      .place-title { font-size: 36px; }
+      .desc-content { font-size: 17px; line-height: 1.85; }
+    }
   </style>
 </head>
 <body>
 
   <div class="nav-overlay">
-    <div class="circle-btn" onclick="goBack()">
+    <div class="circle-btn" onclick="goBack()" style="margin-right: auto;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </div>
     <div class="circle-btn" onclick="shareLink()">
@@ -189,15 +239,15 @@
   </div>
 
   <div class="app">
-    <div id="skeleton">
-      <div class="skeleton-box" style="width: 100%; height: 260px; border-radius: 0;"></div>
-      <div style="padding: 24px;">
+    <div id="skeleton" style="width:100%; height:100%; display:flex; flex-direction:column;">
+      <div class="skeleton-box" style="width: 100%; height: 300px; border-radius: 0; flex-shrink:0"></div>
+      <div style="padding: 24px; flex-grow:1">
         <div class="skeleton-box" style="width: 70%; height: 32px; margin-bottom: 12px;"></div>
         <div class="skeleton-box" style="width: 100%; height: 80px; margin-bottom: 24px;"></div>
         <div class="skeleton-box" style="width: 100%; height: 200px;"></div>
       </div>
     </div>
-    <div id="mainContent" class="hidden"></div>
+    <div id="mainContent" class="hidden" style="display:contents"></div>
   </div>
 
   <div id="customAlert" class="modal-overlay" onclick="closeAlert()">
@@ -233,12 +283,8 @@
       } catch (e) { console.error(e); }
     }
 
-    // Вспомогательная функция для классов цветов тегов
     function getTagClass(tone) {
-      const map = {
-        green: 'tag-green', blue: 'tag-blue', purple: 'tag-purple', 
-        orange: 'tag-orange', cyan: 'tag-cyan' , pink: 'tag-pink', yellow: 'tag-yellow'
-      };
+      const map = { green: 'tag-green', blue: 'tag-blue', purple: 'tag-purple', orange: 'tag-orange', cyan: 'tag-cyan' , pink: 'tag-pink', yellow: 'tag-yellow' };
       return map[(tone||"").toLowerCase()] || 'tag-gray';
     }
 
@@ -271,6 +317,15 @@
         </a>`;
     }
 
+    // --- ФОРМАТИРОВАНИЕ ТЕКСТА (Абзацы) ---
+    function formatDescription(text) {
+      if (!text) return '';
+      // Разбиваем по переносам строки и оборачиваем в <p>
+      // Если пустая строка - пропускаем
+      const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+      return paragraphs.map(p => `<p>${p}</p>`).join('');
+    }
+
     function renderPage(item) {
       const photos = getPhotos(item);
       const galleryHtml = photos.length ? `
@@ -278,42 +333,31 @@
           <div class="gallery-scroll">
             ${photos.map(src => `<img src="${src}" class="gallery-item" alt="photo">`).join('')}
           </div>
-        </div>` : '';
+        </div>` : '<div class="gallery-container" style="background:#f1f5f9; display:flex;align-items:center;justify-content:center;color:#ccc"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>';
 
-      // --- TAGS LOGIC (UPDATED) ---
+      let pfpHtml = '';
+      if (item.pfp) pfpHtml = `<div class="pfp-container"><img src="${item.pfp}" class="pfp-img" alt="Avatar"></div>`;
+
       let tagsHtml = '';
       const tagsList = [];
-      
-      // 1. Старый метод (tag1, tag2)
       if (item.tag1) tagsList.push({ text: item.tag1, cls: getTagClass(item.tag1_tone) });
       if (item.tag2) tagsList.push({ text: item.tag2, cls: getTagClass(item.tag2_tone) });
-
-      // 2. Новый метод (tags column)
       if (item.tags) {
         const arr = item.tags.split(',').map(s => s.trim()).filter(s => s);
         arr.forEach(t => tagsList.push({ text: t, cls: 'tag-gray' }));
       }
+      if (tagsList.length > 0) tagsHtml = `<div class="tags-container">${tagsList.map(t => `<span class="tag-chip ${t.cls}">${t.text}</span>`).join('')}</div>`;
 
-      if (tagsList.length > 0) {
-        tagsHtml = `<div class="tags-container">${tagsList.map(t => `<span class="tag-chip ${t.cls}">${t.text}</span>`).join('')}</div>`;
-      }
-
-      // --- RATING ---
       let ratingBlock = '';
       if (item.rating) {
         ratingBlock = `
           <div class="rating-row">
             <div class="stars-svg">${renderStars(item.rating)}</div>
             <span class="rating-val">${item.rating}</span>
-            ${item.twoGis ? `
-              <a href="${item.twoGis}" target="_blank" class="btn-2gis-small">
-                <span>${t.open2gis}</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-              </a>` : ''}
+            ${item.twoGis ? `<a href="${item.twoGis}" target="_blank" class="btn-2gis-small"><span>${t.open2gis}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>` : ''}
           </div>`;
       }
 
-      // --- ACTIONS ---
       let actionsGrid = '';
       const phone = item.phone || item.contact;
       const cleanWa = item.whatsapp ? item.whatsapp.replace(/\D/g,'') : null;
@@ -324,20 +368,25 @@
         actionsGrid += `</div>`;
       }
 
-      // --- INFO LIST ---
       let infoRows = '';
       if (item.salary || item.price) infoRows += `<div class="info-row salary-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><div class="info-content"><div class="info-title">${item.salary || item.price}</div><div class="info-subtitle">Зарплата / Цена</div></div></div>`;
       if (item.address) infoRows += `<div class="info-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div><div class="info-content"><div class="info-title">${item.address}</div><div class="info-subtitle">Адрес</div></div></div>`;
       if (item.hours) infoRows += `<div class="info-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="info-content"><div class="info-title">${item.hours}</div><div class="info-subtitle">График</div></div></div>`;
-      
       if (item.instagram) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C13584" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`, "Instagram", "Открыть профиль", item.instagram, true);
       if (item.tiktok) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>`, "TikTok", "Смотреть видео", item.tiktok, true);
       if (item.telegram) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#229ED9" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`, "Telegram", "Написать", item.telegram, true);
       if (item.website) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>`, "Веб-сайт", "Перейти", item.website, true);
 
+      // Красивое описание
+      const descHtml = item.desc_full || item.desc 
+        ? `<div class="section-label" style="margin-top:32px">Инфо</div>
+           <div class="desc-content">${formatDescription(item.desc_full || item.desc)}</div>` 
+        : '';
+
       document.getElementById("mainContent").innerHTML = `
         ${galleryHtml}
-        <div class="card-body ${!galleryHtml ? 'no-hero' : ''}">
+        <div class="card-body ${!photos.length ? 'no-hero' : ''}">
+          ${pfpHtml}
           <div class="place-header">
             <div class="place-title">${item.title}</div>
             <div class="place-category">${item.category || item.subtitle || ''}</div>
@@ -347,7 +396,7 @@
           ${actionsGrid}
           <div class="section-label"></div>
           <div class="info-list">${infoRows}</div>
-          ${item.desc_full || item.desc ? `<div class="section-label" style="margin-top:24px">Инфо</div><div class="desc-text">${item.desc_full || item.desc}</div>` : ''}
+          ${descHtml}
           <br><br>
         </div>`;
     }
