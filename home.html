@@ -46,20 +46,33 @@
     .app { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
     .content { width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px var(--pad); display: flex; flex-direction: column; gap: 24px; }
 
-    /* LANGUAGE SWITCH */
-    .lang-switch { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .lang-btn {
-      height: 32px; min-width: 46px; padding: 0 10px; border-radius: 999px;
-      border: var(--border); background: rgba(255, 255, 255, 0.7);
-      font-size: 12px; font-weight: 700; color: #172343; cursor: pointer;
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    /* LANG SWITCHER */
+    .header-row { display: flex; justify-content: flex-end; margin-bottom: -10px; }
+    .lang-switch {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 4px;
+      border-radius: 12px;
+      display: flex;
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
-    .lang-btn.is-active { background: var(--primary); color: #fff; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-    .lang-btn:active { transform: scale(0.96); }
+    .lang-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #666;
+    }
+    .lang-btn.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
     /* SEARCH */
-    .question-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .search-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
     .search { position: relative; width: 100%; }
     .search-bg {
@@ -107,13 +120,34 @@
     .add-action-sub { font-size: 12px; color: #666; font-weight: 500; }
     .add-action-icon { width: 36px; height: 36px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
 
-    /* SECTION HEADER */
+    /* SECTION HEADER & TAG FILTER */
     .section-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 10px; }
     .section-title { font-size: 20px; font-weight: 700; color: #172343; line-height: 1.2; }
     .show-all { flex-shrink: 0; padding: 8px 16px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 99px; border: var(--border); font-size: 13px; font-weight: 600; cursor: pointer; }
 
+    /* ACTIVE TAG PANEL */
+    .active-tag-panel {
+      display: none; align-items: center; gap: 10px;
+      margin-top: -10px; animation: fadeIn 0.3s ease;
+    }
+    .active-tag-panel.visible { display: flex; }
+    
+    .active-tag-chip {
+      background: var(--primary); color: #fff;
+      padding: 6px 14px; border-radius: 99px;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,32,91,0.2);
+    }
+    .close-tag-btn {
+      cursor: pointer; display: flex; align-items: center;
+      opacity: 0.8; transition: 0.2s;
+    }
+    .close-tag-btn:hover { opacity: 1; transform: scale(1.1); }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
     /* CARDS GRID */
-    /* ИСПРАВЛЕНИЕ 1: minmax уменьшен до 280px, чтобы не ломалось на iPhone SE и узких экранах */
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding-bottom: 40px; }
     
     .card { 
@@ -128,38 +162,29 @@
     .vip-badge { position: absolute; top: -10px; right: 15px; background: var(--vip-gold); color: #000; font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 8px; }
 
     .card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
-    
-    /* ИСПРАВЛЕНИЕ 2: flex: 1 и min-width: 0 для обрезания текста */
-    .card__left { 
-      display: flex; gap: 12px; align-items: center; 
-      overflow: hidden; 
-      flex: 1; /* Занимаем всё свободное место */
-      min-width: 0; /* РАЗРЕШАЕМ сжиматься меньше контента (чтобы ... работало) */
-    }
-    
+    .card__left { display: flex; gap: 12px; align-items: center; overflow: hidden; flex: 1; min-width: 0; }
     .card__icon { width: 36px; height: 36px; flex-shrink: 0; object-fit: contain; border-radius: 8px; }
-    .card__meta { overflow: hidden; } /* Обертка для текста, чтобы не вылезал */
-    
+    .card__meta { overflow: hidden; } 
     .card__title { font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card__sub { font-size: 13px; color: #888; margin-top: 2px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    
-    /* ИСПРАВЛЕНИЕ 3: Ограничение ширины зарплаты */
     .card__salary { 
-      flex-shrink: 0; 
-      font-size: 12px; font-weight: 700; color: #009945; background: #eafff0; 
+      flex-shrink: 0; font-size: 12px; font-weight: 700; color: #009945; background: #eafff0; 
       padding: 4px 8px; border-radius: 6px; 
-      max-width: 45%; /* Не даем занять больше 45% ширины */
-      text-align: right;
-      white-space: normal; /* Разрешаем перенос строк, если очень длинная сумма */
-      word-break: break-word; 
+      max-width: 45%; text-align: right; white-space: normal; word-break: break-word; 
     }
-    
     .card__desc { font-size: 14px; line-height: 1.5; color: #444; flex-grow: 1; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } 
     .card__bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    
+    /* INTERACTIVE TAGS */
     .card__tags { display: flex; gap: 6px; overflow: hidden; }
-    .card__more { flex-shrink: 0; height: 36px; padding: 0 18px; border-radius: 99px; background: var(--primary); color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+    .tag { 
+      height: 26px; padding: 0 10px; border-radius: 99px; 
+      display: inline-flex; align-items: center; 
+      font-size: 11px; font-weight: 600; white-space: nowrap; 
+      cursor: pointer; transition: 0.2s;
+    }
+    .tag:hover { transform: translateY(-2px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); opacity: 0.9; }
 
-    .tag { height: 26px; padding: 0 10px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; white-space: nowrap; }
     .tag--cyan { background: #e0fbfd; color: #006c75; }
     .tag--pink { background: #ffebeb; color: #8f0000; }
     .tag--green { background: #e6f9ed; color: #027a3b; }
@@ -169,33 +194,72 @@
     .tag--yellow { background: #fff9e5; color: #b38a00; }
     .tag--gray { background: #f0f0f0; color: #666666; }
 
+    .card__more { flex-shrink: 0; height: 36px; padding: 0 18px; border-radius: 99px; background: var(--primary); color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+
     /* SKELETON */
     .skeleton-box { background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); background-size: 200% 100%; animation: shine 1.5s linear infinite; border-radius: 8px; }
     @keyframes shine { to { background-position-x: -200%; } }
     .sk-card { min-height: 220px; }
 
-    /* ===== DESKTOP ADAPTIVITY ===== */
+    /* MEDIA QUERIES */
     @media (min-width: 768px) {
       .question { font-size: 32px; text-align: center; margin-bottom: 10px; }
       .search-container { max-width: 800px; margin: 0 auto; }
       .categories { max-width: 800px; margin: 0 auto; gap: 24px; }
       .category { aspect-ratio: 15/5; }
       .add-action-box { max-width: 800px; margin: 0 auto; }
-      .section-row { max-width: 1200px; margin: 20px auto 10px; }
+      .section-row, .active-tag-panel { max-width: 1200px; margin: 20px auto 10px; }
       .cards { grid-template-columns: repeat(2, 1fr); gap: 30px; }
     }
-
     @media (min-width: 1024px) {
       .cards { grid-template-columns: repeat(3, 1fr); }
       .question { font-size: 40px; }
     }
-
     @media (max-width: 767px) {
       .app { max-width: 100%; background: transparent; }
       .content { padding: 20px 16px; }
       .cards { grid-template-columns: 1fr; }
       .category { aspect-ratio: 167/197; }
     }
+
+    /* ===== НОВЫЕ СТИЛИ ДЛЯ ШАПКИ ПОИСКА ===== */
+
+/* Контейнер для Заголовка и Переключателя */
+.search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Текст слева, язык справа */
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+/* Убираем старый отступ снизу у вопроса, так как теперь отступ задает контейнер */
+.question {
+  margin-bottom: 0 !important;
+  line-height: 1; /* Чтобы текст ровно стоял по центру */
+}
+
+/* На мобильных (по умолчанию) */
+.lang-switch {
+  margin-left: 10px;
+  flex-shrink: 0; /* Чтобы переключатель не сжимался */
+}
+
+/* На планшетах и ПК */
+@media (min-width: 768px) {
+  .search-header {
+    justify-content: center; /* Центрируем всё */
+    position: relative;      /* Для абсолютного позиционирования языка */
+  }
+  
+  /* Если хотите, чтобы на ПК язык был справа с краю, а текст по центру: */
+  .search-header .lang-switch {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
   </style>
 </head>
 
@@ -203,14 +267,19 @@
   <div class="app">
     <div class="content">
 
+      
+
       <div class="search-container">
-        <div class="question-row">
+        
+        <div class="search-header">
           <div class="question" data-i18n="question">Не іздеп отырсыз?</div>
-          <div class="lang-switch" aria-label="Language switch">
-            <button class="lang-btn" type="button" data-lang="kz">KZ</button>
-            <button class="lang-btn" type="button" data-lang="ru">RU</button>
+          
+          <div class="lang-switch">
+            <div class="lang-btn" onclick="changeLang('kz')" id="btnKz">KZ</div>
+            <div class="lang-btn" onclick="changeLang('ru')" id="btnRu">RU</div>
           </div>
         </div>
+
         <div class="search">
           <div class="search-bg"></div>
           <div class="searchbar">
@@ -219,7 +288,6 @@
           </div>
         </div>
       </div>
-
       <div class="categories">
         <div class="category category--work is-active" id="catWork" data-type="vacancy">
           <div class="category__bg"></div>
@@ -246,10 +314,19 @@
       <a href="https://t.me/jumys_online_bot" target="_blank" class="add-action-box">
         <div class="add-action-text">
           <div class="add-action-title" data-i18n="add_title">Өз хабарландыруыңды қос</div>
-          <div class="add-action-sub" data-i18n="add_sub">Жұмыс немесе жұмысшы іздеу 1000₸</div>
+          <div class="add-action-sub" data-i18n="add_sub">Жұмыс немесе жұмысшы іздеу 650₸</div>
         </div>
         <div class="add-action-icon">+</div>
       </a>
+
+      <div id="activeTagPanel" class="active-tag-panel">
+        <div class="active-tag-chip">
+          <span id="activeTagText">#tag</span>
+          <div class="close-tag-btn" onclick="clearTag()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+        </div>
+      </div>
 
       <div class="section-row">
         <div class="section-title" id="sectionTitle" data-i18n="section_title_vac">Ұсынылған вакансиялар</div>
@@ -267,8 +344,27 @@
           <div class="skeleton-box" style="height:60px;width:100%;margin:16px 0"></div>
           <div style="display:flex;justify-content:space-between;align-items:center"><div class="skeleton-box" style="height:26px;width:80px;border-radius:20px"></div><div class="skeleton-box" style="height:36px;width:100px;border-radius:20px"></div></div>
         </div>
+        <div class="card sk-card">
+          <div style="display:flex;gap:12px"><div class="skeleton-box" style="height:36px;width:36px"></div><div style="flex:1"><div class="skeleton-box" style="height:14px;width:60%;margin-bottom:6px"></div><div class="skeleton-box" style="height:10px;width:40%"></div></div></div>
+          <div class="skeleton-box" style="height:60px;width:100%;margin:16px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="skeleton-box" style="height:26px;width:80px;border-radius:20px"></div><div class="skeleton-box" style="height:36px;width:100px;border-radius:20px"></div></div>
+        </div>
+        <div class="card sk-card">
+          <div style="display:flex;gap:12px"><div class="skeleton-box" style="height:36px;width:36px"></div><div style="flex:1"><div class="skeleton-box" style="height:14px;width:60%;margin-bottom:6px"></div><div class="skeleton-box" style="height:10px;width:40%"></div></div></div>
+          <div class="skeleton-box" style="height:60px;width:100%;margin:16px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="skeleton-box" style="height:26px;width:80px;border-radius:20px"></div><div class="skeleton-box" style="height:36px;width:100px;border-radius:20px"></div></div>
+        </div>
+        <div class="card sk-card">
+          <div style="display:flex;gap:12px"><div class="skeleton-box" style="height:36px;width:36px"></div><div style="flex:1"><div class="skeleton-box" style="height:14px;width:60%;margin-bottom:6px"></div><div class="skeleton-box" style="height:10px;width:40%"></div></div></div>
+          <div class="skeleton-box" style="height:60px;width:100%;margin:16px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="skeleton-box" style="height:26px;width:80px;border-radius:20px"></div><div class="skeleton-box" style="height:36px;width:100px;border-radius:20px"></div></div>
+        </div>
+        <div class="card sk-card">
+          <div style="display:flex;gap:12px"><div class="skeleton-box" style="height:36px;width:36px"></div><div style="flex:1"><div class="skeleton-box" style="height:14px;width:60%;margin-bottom:6px"></div><div class="skeleton-box" style="height:10px;width:40%"></div></div></div>
+          <div class="skeleton-box" style="height:60px;width:100%;margin:16px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="skeleton-box" style="height:26px;width:80px;border-radius:20px"></div><div class="skeleton-box" style="height:36px;width:100px;border-radius:20px"></div></div>
+        </div>
       </div>
-
     </div>
   </div>
 
@@ -277,16 +373,30 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    let currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
+    const currentLang = (urlLang === "ru") ? "ru" : (localStorage.getItem("lang") === "ru" ? "ru" : "kz");
+
+    function updateLangButtons() {
+      document.getElementById("btnKz").classList.toggle("active", currentLang === "kz");
+      document.getElementById("btnRu").classList.toggle("active", currentLang === "ru");
+    }
+    updateLangButtons();
+
+    function changeLang(lang) {
+      if (lang === currentLang) return;
+      localStorage.setItem("lang", lang);
+      const url = new URL(window.location);
+      url.searchParams.set("lang", lang);
+      window.location.href = url.toString();
+    }
 
     const translations = {
       kz: { 
-        question: "Не іздеп отырсыз?", placeholder: "Кілт сөз...", cat_work: "Жұмыс", cat_work_sub: "Вакансиялар қарау", cat_worker: "Жұмысшы", cat_worker_sub: "Анкеталар қарау", section_title_vac: "Ұсынылған вакансиялар", section_title_prof: "Ұсынылған анкеталар", show_all: "Бәрі", not_found: "Ештеңе табылмады :(", open_btn: "Ашу", vac_count: " вакансия", prof_count: " анкета",
-        add_title: "Өз хабарландыруыңды қос", add_sub: "Жұмыс немесе жұмысшы іздеу 1000₸"
+        question: "Не іздеп отырсыз?", placeholder: "Іздеу", cat_work: "Жұмыс", cat_work_sub: "Вакансиялар қарау", cat_worker: "Жұмысшы", cat_worker_sub: "Анкеталар қарау", section_title_vac: "Ұсынылған вакансиялар", section_title_prof: "Ұсынылған анкеталар", show_all: "Бәрі", not_found: "Ештеңе табылмады :(", open_btn: "Ашу", vac_count: " вакансия", prof_count: " анкета",
+        add_title: "Өз хабарландыруыңды қос", add_sub: "Жұмыс немесе жұмысшы іздеу 650₸"
       },
       ru: { 
-        question: "Что вы ищете?", placeholder: "Ключевое слово...", cat_work: "Работа", cat_work_sub: "Смотреть вакансии", cat_worker: "Работник", cat_worker_sub: "Смотреть анкеты", section_title_vac: "Рекомендуемые вакансии", section_title_prof: "Рекомендуемые анкеты", show_all: "Все", not_found: "Ничего не найдено :(", open_btn: "Открыть", vac_count: " вакансий", prof_count: " анкет",
-        add_title: "Добавить своё объявление", add_sub: "Поиск работы или сотрудников 1000₸"
+        question: "Что вы ищете?", placeholder: "Поиск", cat_work: "Работа", cat_work_sub: "Смотреть вакансии", cat_worker: "Работник", cat_worker_sub: "Смотреть анкеты", section_title_vac: "Рекомендуемые вакансии", section_title_prof: "Рекомендуемые анкеты", show_all: "Все", not_found: "Ничего не найдено :(", open_btn: "Открыть", vac_count: " вакансий", prof_count: " анкет",
+        add_title: "Добавить своё объявление", add_sub: "Поиск работы или сотрудников 650₸"
       }
     };
 
@@ -297,26 +407,8 @@
     }
     applyLang();
 
-    function updateLangButtons() {
-      document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.classList.toggle("is-active", btn.dataset.lang === currentLang);
-      });
-    }
-    updateLangButtons();
-
-    function setLang(lang) {
-      if (!translations[lang]) return;
-      currentLang = lang;
-      localStorage.setItem("lang", lang);
-      const params = new URLSearchParams(window.location.search);
-      params.set("lang", lang);
-      history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
-      applyLang();
-      draw();
-      updateLangButtons();
-    }
-
-    const state = { type: "vacancy", q: "" };
+    // --- STATE MANAGEMENT ---
+    const state = { type: "vacancy", q: "", tag: null }; 
     let items = [];
 
     function escapeHtml(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
@@ -326,9 +418,15 @@
       return "tag " + (map[(tone || "").toLowerCase()] || "tag--gray");
     }
 
+    // --- RENDER CARD (UPDATED: Clickable Tags) ---
     function renderCard(x){
       const t = translations[currentLang];
-      const tagsHtml = (x.tags || []).slice(0, 3).map(k => `<span class="${tagClass(k.tone)}">${escapeHtml(k.text)}</span>`).join("");
+      
+      // Клик по ТЭГУ теперь фильтрует
+      const tagsHtml = (x.tags || []).slice(0, 3).map(k => 
+        `<span class="${tagClass(k.tone)}" onclick="event.preventDefault(); filterByTag('${escapeHtml(k.text)}')" title="Фильтр по тегу">${escapeHtml(k.text)}</span>`
+      ).join("");
+      
       const isVip = x.is_vip == "1";
 
       return `
@@ -353,12 +451,44 @@
       `;
     }
 
+    // --- FILTER LOGIC ---
+    function filterByTag(tagName) {
+      state.tag = tagName;
+      state.q = ""; 
+      document.getElementById("q").value = "";
+      document.getElementById("activeTagText").textContent = "#" + tagName;
+      document.getElementById("activeTagPanel").classList.add("visible");
+      draw();
+    }
+
+    function clearTag() {
+      state.tag = null;
+      document.getElementById("activeTagPanel").classList.remove("visible");
+      draw();
+    }
+
+    // --- SEARCH & DRAW ---
     function draw(){
       const q = state.q.trim().toLowerCase();
+      
       let list = items.filter(x => {
         if (x.type !== state.type) return false;
+
+        // 1. Если выбран ТЭГ из фильтра
+        if (state.tag) {
+          const hasTag = (x.tags || []).some(t => t.text === state.tag);
+          if (!hasTag) return false;
+        }
+
+        // 2. Поиск по тексту (Текст + Тэги + Хэштеги)
         if (!q) return true;
-        return (x.title + " " + x.subtitle + " " + x.desc).toLowerCase().includes(q);
+        
+        // Собираем весь текст, включая хэштеги в одну строку
+        const tagString = (x.tags || []).map(t => t.text).join(" ");
+        const hashtagString = (x.hashtags || []).join(" "); // Хэштеги тоже участвуют в поиске
+        const fullText = (x.title + " " + x.subtitle + " " + x.desc + " " + tagString + " " + hashtagString).toLowerCase();
+        
+        return fullText.includes(q);
       });
 
       list.sort((a, b) => (b.is_vip || 0) - (a.is_vip || 0));
@@ -385,25 +515,41 @@
           ...x,
           type: (x.type || "vacancy").toLowerCase(),
           is_vip: x.is_vip || 0,
+          // Парсинг тэгов (цветных)
           tags: [
-            x.tag1 ? { text: x.tag1, tone: x.tag1_tone } : null,
-            x.tag2 ? { text: x.tag2, tone: x.tag2_tone } : null
-          ].filter(Boolean)
+            x.tag1 ? { text: String(x.tag1), tone: x.tag1_tone } : null,
+            x.tag2 ? { text: String(x.tag2), tone: x.tag2_tone } : null
+          ].filter(Boolean),
+          // Парсинг хэштегов (для поиска)
+          hashtags: x.hashtags ? String(x.hashtags).split(',').map(h=>h.trim()) : []
         }));
         draw();
       } catch(e) { console.error(e); }
     }
 
     document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; draw(); });
-    document.getElementById("catWork").onclick = () => { state.type = "vacancy"; document.getElementById("catWork").classList.add("is-active"); document.getElementById("catWorker").classList.remove("is-active"); draw(); };
-    document.getElementById("catWorker").onclick = () => { state.type = "profile"; document.getElementById("catWorker").classList.add("is-active"); document.getElementById("catWork").classList.remove("is-active"); draw(); };
-    document.getElementById("showAll").onclick = () => { state.q = ""; document.getElementById("q").value = ""; draw(); };
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.onclick = () => setLang(btn.dataset.lang);
-    });
+    
+    document.getElementById("catWork").onclick = () => { 
+      state.type = "vacancy"; clearTag(); 
+      document.getElementById("catWork").classList.add("is-active"); 
+      document.getElementById("catWorker").classList.remove("is-active"); 
+      draw(); 
+    };
+    
+    document.getElementById("catWorker").onclick = () => { 
+      state.type = "profile"; clearTag(); 
+      document.getElementById("catWorker").classList.add("is-active"); 
+      document.getElementById("catWork").classList.remove("is-active"); 
+      draw(); 
+    };
+    
+    document.getElementById("showAll").onclick = () => { 
+      state.q = ""; 
+      document.getElementById("q").value = ""; 
+      clearTag();
+    };
 
     loadFromSheets();
   </script>
 </body>
 </html>
-

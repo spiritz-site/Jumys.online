@@ -109,7 +109,7 @@
     .place-title { font-size: 28px; font-weight: 800; line-height: 1.15; margin-bottom: 6px; color: #0F172A; }
     .place-category { font-size: 15px; font-weight: 500; color: #64748b; }
 
-    /* Tags */
+    /* Tags (Chips) */
     .tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; margin-bottom: 20px; }
     .tag-chip { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
     .tag-gray { background: #F1F5F9; color: #475569; }
@@ -120,6 +120,21 @@
     .tag-cyan { background: #CFFAFE; color: #155E75; }
     .tag-pink { background: #ffebeb; color: #8f0000; }
     .tag-yellow { background: #fff9e5; color: #b38a00; }
+
+    /* HASHTAGS (New) */
+    .hashtags-block {
+      margin-top: 16px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .hashtag-link {
+      color: #00205b; /* Primary color */
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .hashtag-link:hover { opacity: 1; text-decoration: underline; }
 
     /* Rating */
     .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; }
@@ -321,7 +336,6 @@
     function formatDescription(text) {
       if (!text) return '';
       // Разбиваем по переносам строки и оборачиваем в <p>
-      // Если пустая строка - пропускаем
       const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
       return paragraphs.map(p => `<p>${p}</p>`).join('');
     }
@@ -338,6 +352,7 @@
       let pfpHtml = '';
       if (item.pfp) pfpHtml = `<div class="pfp-container"><img src="${item.pfp}" class="pfp-img" alt="Avatar"></div>`;
 
+      // --- TAGS (CHIPS) ---
       let tagsHtml = '';
       const tagsList = [];
       if (item.tag1) tagsList.push({ text: item.tag1, cls: getTagClass(item.tag1_tone) });
@@ -347,6 +362,15 @@
         arr.forEach(t => tagsList.push({ text: t, cls: 'tag-gray' }));
       }
       if (tagsList.length > 0) tagsHtml = `<div class="tags-container">${tagsList.map(t => `<span class="tag-chip ${t.cls}">${t.text}</span>`).join('')}</div>`;
+
+      // --- HASHTAGS (NEW) ---
+      let hashtagsHtml = '';
+      if (item.hashtags) {
+        const tags = item.hashtags.split(',').map(s => s.trim()).filter(s => s);
+        hashtagsHtml = `<div class="hashtags-block">
+          ${tags.map(tag => `<span class="hashtag-link">#${tag.replace('#','')}</span>`).join('')}
+        </div>`;
+      }
 
       let ratingBlock = '';
       if (item.rating) {
@@ -377,10 +401,12 @@
       if (item.telegram) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#229ED9" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`, "Telegram", "Написать", item.telegram, true);
       if (item.website) infoRows += renderInfoRow(`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>`, "Веб-сайт", "Перейти", item.website, true);
 
-      // Красивое описание
-      const descHtml = item.desc_full || item.desc 
+      // Красивое описание с ХЭШТЕГАМИ
+      const descHtml = (item.desc_full || item.desc)
         ? `<div class="section-label" style="margin-top:32px">Инфо</div>
-           <div class="desc-content">${formatDescription(item.desc_full || item.desc)}</div>` 
+           <div class="desc-content">${formatDescription(item.desc_full || item.desc)}</div>
+           ${hashtagsHtml}
+          ` 
         : '';
 
       document.getElementById("mainContent").innerHTML = `
