@@ -17,6 +17,11 @@
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/spiritz-site/Jumys.online/main/favicon.png">
   
   <style>
+    body {
+  /* ... твои стили ... */
+  overflow-x: hidden;
+  width: 100%;
+}
     /* ===== BASE ===== */
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { height: 100%; margin: 0; }
@@ -170,21 +175,53 @@
     .card__title { font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card__sub { font-size: 13px; color: #888; margin-top: 2px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card__salary { 
-      flex-shrink: 0; font-size: 12px; font-weight: 700; color: #009945; background: #eafff0; 
-      padding: 4px 8px; border-radius: 6px; 
-      max-width: 45%; text-align: right; white-space: normal; word-break: break-word; 
-    }
+  flex-shrink: 0; 
+  font-size: 12px; 
+  font-weight: 700; 
+  color: #009945; 
+  background: #eafff0; 
+  padding: 4px 8px; 
+  border-radius: 6px; 
+  
+  /* Исправления: */
+  max-width: 120px;       /* Ограничиваем ширину */
+  text-align: right; 
+  white-space: normal;    /* Разрешаем перенос на новую строку */
+  word-break: break-word; /* Разрываем длинные слова, если нужно */
+  line-height: 1.2;
+}
     .card__desc { font-size: 14px; line-height: 1.5; color: #444; flex-grow: 1; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } 
     .card__bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
     
     /* INTERACTIVE TAGS */
-    .card__tags { display: flex; gap: 6px; overflow: hidden; }
-    .tag { 
-      height: 26px; padding: 0 10px; border-radius: 99px; 
-      display: inline-flex; align-items: center; 
-      font-size: 11px; font-weight: 600; white-space: nowrap; 
-      cursor: pointer; transition: 0.2s;
-    }
+    .card__tags { 
+  display: flex; 
+  gap: 6px; 
+  overflow: hidden; 
+  flex-wrap: wrap; /* Разрешаем тегам перепрыгивать на вторую строку, если их много */
+}
+
+.tag { 
+  height: 26px; 
+  padding: 0 10px; 
+  border-radius: 99px; 
+  display: inline-flex; 
+  align-items: center; 
+  font-size: 11px; 
+  font-weight: 600; 
+  
+  /* Исправления: */
+  white-space: nowrap; 
+  max-width: 150px;      /* Ограничиваем длинные теги */
+  overflow: hidden; 
+  text-overflow: ellipsis; /* Если текст тега не влез, будет "..." */
+}
+.card__title, .card__sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
     .tag:hover { transform: translateY(-2px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); opacity: 0.9; }
 
     .tag--cyan { background: #e0fbfd; color: #006c75; }
